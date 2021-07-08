@@ -15,6 +15,8 @@ function App() {
   const [imageWidth, setImageWidth] = useState<number>(400);
   const [imageHeight, setImageHeight] = useState<number>(400);
   const [showModal, setShowModal] = useState<Boolean>(false);
+  const [previousBtn, setPreviousBtn] = useState(40);
+  const [nextBtn, setNextBtn] = useState(38);
 
   let index = 0;
   let imgsLength = 0;
@@ -33,7 +35,7 @@ function App() {
 
   const handleKeyPress = (event: any) => {
     switch(event.keyCode) {
-      case 40:
+      case previousBtn:
         index = index - 1;
         if(index < 0) {
           index = imgsLength - 1;
@@ -41,7 +43,7 @@ function App() {
         console.log(index);
         setImgIndex(index);
       break;
-      case 38:
+      case nextBtn:
         index = index + 1;
         if(index >= imgsLength) {
           index = 0;
