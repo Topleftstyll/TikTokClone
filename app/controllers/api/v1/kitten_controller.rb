@@ -5,18 +5,17 @@ module Api::V1
             render json: @kittens
         end
 
-        # def create
-        #     @post = current_user.posts.build(post_params)
+        def create
+            @kitten = Kitten.new(kitten_params)
         
-        #     respond_to do |format|
-        #         if @post.save
-        #             format.html { redirect_to @post, notice: "Post was successfully created." }
-        #             format.json { render :show, status: :created, location: @post }
-        #         else
-        #             format.html { render :new, status: :unprocessable_entity }
-        #             format.json { render json: @post.errors, status: :unprocessable_entity }
-        #         end
-        #     end
-        # end
+            if @kitten.save
+                render json: @kitten
+            end
+        end
+
+        private
+        def kitten_params
+            params.require(:kitten).permit(:url)
+        end
     end
 end

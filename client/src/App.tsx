@@ -14,6 +14,8 @@ function App() {
   const [imgIndex, setImgIndex] = useState<number>(0);
   const [imageWidth, setImageWidth] = useState<number>(400);
   const [imageHeight, setImageHeight] = useState<number>(400);
+  const [showModal, setShowModal] = useState<Boolean>(false);
+
   let index = 0;
   let imgsLength = 0;
 
@@ -58,6 +60,10 @@ function App() {
     setImageWidth(event.target.value);
   }
 
+  const ToggleModal = () => {
+    setShowModal(!showModal);
+  }
+
   return (
     <div className="container text-center">
       {kittens &&
@@ -65,10 +71,8 @@ function App() {
           <Image url={kittens[imgIndex].url} x={imageWidth} y={imageHeight} />
           <input type="text" value={imageWidth} onChange={inputWidth} placeholder="Enter Image Width" />
           <input type="text" value={imageHeight} onChange={inputHeight} placeholder="Enter Image Height"/>
-
-          <div>
-            <UploadImage />
-          </div>
+              
+          <UploadImage />
         </div>
       }
     </div>
