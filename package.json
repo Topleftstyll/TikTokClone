@@ -1,0 +1,25 @@
+{
+  "name": "tiktokclone",
+  "version": "1.0.0",
+  "description": "This README would normally document whatever steps are necessary to get the application up and running.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "build": "cd client && npm install && npm run build && cd ..",
+    "deploy": "cp -a client/build/ . public/",
+    "postinstall": "npm run build && npm run deploy && echo 'Client built'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Topleftstyll/TikTokClone.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Topleftstyll/TikTokClone/issues"
+  },
+  "homepage": "https://github.com/Topleftstyll/TikTokClone#readme"
+}
