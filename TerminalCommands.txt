@@ -1,0 +1,2 @@
+foreman start -f Procfile.dev (to run both servers in 1 line)
+change Client/package.json proxy to "proxy": "https://localhost:3001" (https is for production / http is for development)
