@@ -37,7 +37,7 @@ export default function() {
 
     return(
         <>
-            <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Upload Image</button>
+            <button type="button" className="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">Upload Image</button>
 
             <div className="modal fade" id="exampleModalCenter" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered" role="document">

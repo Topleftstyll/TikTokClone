@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import './App.css';
 import Image from './components/Image';
@@ -15,9 +15,9 @@ function App() {
   const [imgIndex, setImgIndex] = useState<number>(0);
   const [imageWidth, setImageWidth] = useState<number>(400);
   const [imageHeight, setImageHeight] = useState<number>(400);
+  const [sizeButton, setSizeButton] = useState(true);
+  const [customButtons, setCustomButtons] = useState(false);
 
-  let nextP = document.getElementById('next-btn');
-  let prevP = document.getElementById('prev-btn');
   let index = 0;
   let imgsLength = 0;
   let nextBtn = 38;
@@ -43,6 +43,7 @@ function App() {
         if(index < 0) {
           index = imgsLength - 1;
         }
+        console.log(index);
         setImgIndex(index);
       break;
       case nextBtn:
@@ -50,6 +51,7 @@ function App() {
         if(index >= imgsLength) {
           index = 0;
         }
+        console.log(index);
         setImgIndex(index);
       break;
       default:
@@ -59,14 +61,14 @@ function App() {
   }
 
   const SetNewButton = (key: any) => {
-    nextP = document.getElementById('next-btn');
-    prevP = document.getElementById('prev-btn');
-    if(prevP && prevP.innerHTML === "Press any Key") {
-      prevP.innerHTML = key;
+    let nextP = document.getElementById('next-btn');
+    let prevP = document.getElementById('prev-btn');
+    if(prevP && prevP.innerText === "Press any key") {
+      prevP.innerText = key;
       previousBtn = key;
     } 
 
-    if(nextP && nextP.innerHTML === "Press any Key") {
+    if(nextP && nextP.innerHTML === "Press any key") {
       nextP.innerHTML = key;
       nextBtn = key;
     }
@@ -81,16 +83,40 @@ function App() {
   }
 
   const ChangeNextBtn = (event: any) => {
-    if(nextP && prevP){
+    let nextP = document.getElementById('next-btn');
+    let prevP = document.getElementById('prev-btn');
+    if(nextP && prevP) {
       prevP.innerHTML = previousBtn.toString();
-      nextP.innerHTML = "Press any Key";
+      nextP.innerHTML = "Press any key";
     }
   }
 
   const ChangePrevBtn = (event: any) => {
-    if(prevP && nextP){
-      nextP.innerHTML = nextBtn.toString();
-      prevP.innerHTML = "Press any Key";
+    let nextP = document.getElementById('next-btn');
+    let prevP = document.getElementById('prev-btn');
+    if(nextP && prevP) {
+      nextP.innerHTML = previousBtn.toString();
+      prevP.innerHTML = "Press any key";
+    }
+  }
+
+  const Customize = async (buttonName :string) => {
+    switch(buttonName) {
+      case 'size':
+        setCustomButtons(false);
+        setSizeButton(true);
+      break;
+      case 'change-btns':
+        await setSizeButton(false);
+        await setCustomButtons(true);
+        let nextP = document.getElementById('next-btn');
+        let prevP = document.getElementById('prev-btn');
+        if(nextP && prevP) {
+          console.log("sadf")
+          nextP.innerHTML = nextBtn.toString();
+          prevP.innerHTML = previousBtn.toString();
+        }
+      break;
     }
   }
 
@@ -98,16 +124,67 @@ function App() {
     <div className="container text-center">
       {kittens &&
         <div>
-          <Image url={kittens[imgIndex].url} x={imageWidth} y={imageHeight} description={kittens[imgIndex].description} />
-          <input type="text" value={imageWidth} onChange={InputWidth} />
-          <input type="text" value={imageHeight} onChange={InputHeight}/>
+          <div className="mt-5">
+            <Image url={kittens[imgIndex].url} x={imageWidth} y={imageHeight} description={kittens[imgIndex].description} />
+          </div>
 
-          <UploadImage />
+          <div className="mb-4">
+            <UploadImage />
+          </div>
 
-          <p id="next-btn"></p>
-          <button className="btn btn-primary" onClick={ChangeNextBtn}>Next</button>
-          <p id="prev-btn"></p>
-          <button className="btn btn-primary" onClick={ChangePrevBtn}>Prev</button>
+          <div className="m-auto">
+            <button className="btn btn-primary m-3" onClick={() => Customize("size")}>Change Image Size</button>
+            <button className="btn btn-primary" onClick={() => Customize("change-btns")}>Change Buttons</button>
+          </div>
+
+          {sizeButton &&
+            <div className="mt-3">
+              <div className="m-auto">
+                <h4>Change the image size</h4>
+                <div className="row m-auto mt-2">
+                  <div className="col m-2">
+                    <label className="mr-2">X:</label>
+                    <input id="width" type="text" value={imageWidth} onChange={InputWidth} />
+                  </div>
+                </div>
+
+                <div className="row m-auto">
+                  <div className="col">
+                    <label className="mr-2">Y:</label>
+                    <input type="text" value={imageHeight} onChange={InputHeight}/>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+
+          {customButtons &&
+            <div className="mt-3">
+              <h4 className="mb-4">Change the control buttons</h4>
+              
+              <div className="row">
+                <div className="col">
+                </div>
+
+                <div className="col-3">
+                  <div className="d-flex justify-content-around">
+                    <div>
+                      <button className="btn btn-primary" onClick={ChangeNextBtn}>Next</button>
+                      <p id="next-btn" className="mt-1"></p>
+                    </div>
+
+                    <div>
+                      <button className="btn btn-primary" onClick={ChangePrevBtn}>Prev</button>
+                      <p id="prev-btn" className="mt-1"></p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col">
+                </div>
+              </div>
+            </div>
+          }
         </div>
       }
     </div>
