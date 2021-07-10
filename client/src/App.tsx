@@ -1,13 +1,21 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './App.css';
-import Image from './components/Image';
 import UploadImage from './components/UploadImage';
+import { useSwipeable } from 'react-swipeable';
 
 interface Kitten {
   id: number;
   url: string;
   description: Text;
+}
+
+const config = {
+  delta: 5,
+  preventDefaultTouchmoveEvent: false,
+  trackTouch: true,
+  trackMouse: true,
+  rotationAngle: 0,
 }
 
 function App() {
@@ -17,6 +25,8 @@ function App() {
   const [imageHeight, setImageHeight] = useState<number>(400);
   const [sizeButton, setSizeButton] = useState(true);
   const [customButtons, setCustomButtons] = useState(false);
+
+  const handlers = useSwipeable({ onSwipedRight: (eventData) => {SwipedRight()}, onSwipedLeft: (eventData) => {SwipedLeft()}, ...config });
 
   let index = 0;
   let imgsLength = 0;
@@ -28,11 +38,11 @@ function App() {
     
     axios.get<Kitten[]>('/api/v1/kitten').then(res => {
       return res.data;
-    }).then((kittens) => {
-      setKittens(kittens);
-      index = Math.floor(Math.random() * kittens.length);
+    }).then((newKittens) => {
+      setKittens(newKittens);
+      index = Math.floor(Math.random() * newKittens.length);
       setImgIndex(index);
-      imgsLength = kittens.length;
+      imgsLength = newKittens.length;
     });
   }, []);
 
@@ -43,7 +53,6 @@ function App() {
         if(index < 0) {
           index = imgsLength - 1;
         }
-        console.log(index);
         setImgIndex(index);
       break;
       case nextBtn:
@@ -51,7 +60,6 @@ function App() {
         if(index >= imgsLength) {
           index = 0;
         }
-        console.log(index);
         setImgIndex(index);
       break;
       default:
@@ -120,21 +128,40 @@ function App() {
     }
   }
 
+  const SwipedRight = () => {
+    let tmpIndex = imgIndex - 1;
+    if(tmpIndex < 0 && kittens) {
+      tmpIndex = kittens.length - 1;
+    }
+    setImgIndex(tmpIndex);
+  }
+
+  const SwipedLeft = () => {
+    let tmpIndex = imgIndex + 1;
+    if(kittens && tmpIndex >= kittens.length) {
+      tmpIndex = 0;
+    }
+    setImgIndex(tmpIndex);
+    
+  }
+
   return (
     <div className="container text-center">
-      {kittens &&
+      {kittens && 
         <div>
           <div className="mt-5">
-            <Image url={kittens[imgIndex].url} x={imageWidth} y={imageHeight} description={kittens[imgIndex].description} />
+            <div>
+                <img {...handlers} src={kittens[imgIndex].url} width={imageWidth} height={imageHeight} draggable="false" />
+            </div>
           </div>
 
-          <div className="mb-4">
+          <div className="mb-4 mt-4">
             <UploadImage />
           </div>
 
           <div className="m-auto">
             <button className="btn btn-primary m-3" onClick={() => Customize("size")}>Change Image Size</button>
-            <button className="btn btn-primary" onClick={() => Customize("change-btns")}>Change Buttons</button>
+            <button className="btn btn-primary m-3" onClick={() => Customize("change-btns")}>Change Buttons</button>
           </div>
 
           {sizeButton &&
