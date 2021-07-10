@@ -43,7 +43,7 @@ export default function() {
                 <div className="modal-dialog modal-dialog-centered" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLongTitle">Upload Image</h5>
+                            <h5 className="modal-title" id="exampleModalLongTitle">Drag an image from your browser</h5>
                             <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
